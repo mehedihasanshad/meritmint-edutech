@@ -1,13 +1,34 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { Inter, Instrument_Serif, JetBrains_Mono } from 'next/font/google';
 import { getSession } from '@/lib/auth';
 import { LogoutButton } from '@/components/LogoutButton';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { NavLogo } from '@/components/NavLogo';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+const display = Instrument_Serif({
+  subsets: ['latin'],
+  weight: '400',
+  style: ['normal', 'italic'],
+  variable: '--font-display',
+  display: 'swap',
+});
+const mono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
-  title: 'MeritMint',
-  description: 'Tension Gone. Grades On.',
+  title: 'MeritMint — Tension Gone. Grades On.',
+  description:
+    'Admission-prep that actually works. Taught by toppers who cracked it. Resources, mocks, mentorship — one place, one fair price.',
 };
 
 const themeInitScript = `(() => {
@@ -29,19 +50,25 @@ export default async function RootLayout({
 }) {
   const session = await getSession();
   return (
-    <html lang="en" data-theme="dark" suppressHydrationWarning>
+    <html
+      lang="en"
+      data-theme="dark"
+      className={`${inter.variable} ${display.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body>
-        <header className="flex items-center justify-between px-8 py-4">
-          <Link href="/" className="text-xl font-bold tracking-wide">
-            MeritMint
-          </Link>
+        <div className="noise-overlay" aria-hidden />
+        <header className="site-header">
+          <NavLogo />
           <nav className="flex items-center gap-2">
             {session ? (
               <>
-                <span className="text-sm text-white/70">Hi, {session.username}</span>
+                <span className="hidden text-sm text-white/70 sm:inline">
+                  Hi, {session.username}
+                </span>
                 <Link href="/dashboard" className="btn-ghost">
                   Dashboard
                 </Link>
