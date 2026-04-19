@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
+
+type ExamRow = { id: number; title: string; total_marks: number };
 
 export async function GET() {
-  const db = getDb();
-  const rows = db
-    .prepare('SELECT id, title, total_marks FROM exams ORDER BY id')
-    .all();
+  const rows = await query<ExamRow>(
+    'SELECT id, title, total_marks FROM exams ORDER BY id'
+  );
   return NextResponse.json(rows);
 }

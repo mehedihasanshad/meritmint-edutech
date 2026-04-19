@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import { batchWrite, query } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 
 type Answer = { questionId: number; answer: string | null };
@@ -19,16 +19,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'invalid-exam' }, { status: 400 });
   }
 
-  const db = getDb();
-  const rows = db
-    .prepare('SELECT id, correct FROM questions WHERE exam_id = ?')
-    .all(examId) as CorrectRow[];
+  const rows = await query<CorrectRow>(
+    'SELECT id, correct FROM questions WHERE exam_id = ?',
+    [examId]
+  );
   if (rows.length === 0) {
     return NextResponse.json({ error: 'exam-empty' }, { status: 404 });
   }
-
-  const correctMap = new Map<number, string>();
-  rows.forEach((r) => correctMap.set(r.id, r.correct.toLowerCase()));
 
   let score = 0;
   const details = rows.map((r) => {
@@ -40,17 +37,16 @@ export async function POST(req: Request) {
   });
 
   const now = new Date().toISOString();
-  const insertResult = db.prepare(
-    'INSERT INTO results (user_id, exam_id, score, details, created_at) VALUES (?, ?, ?, ?, ?)'
-  );
-  const insertLb = db.prepare(
-    'INSERT INTO leaderboard (exam_id, user_id, score, created_at) VALUES (?, ?, ?, ?)'
-  );
-  const tx = db.transaction(() => {
-    insertResult.run(session.userId, examId, score, JSON.stringify(details), now);
-    insertLb.run(examId, session.userId, score, now);
-  });
-  tx();
+  await batchWrite([
+    {
+      sql: 'INSERT INTO results (user_id, exam_id, score, details, created_at) VALUES (?, ?, ?, ?, ?)',
+      args: [session.userId, examId, score, JSON.stringify(details), now],
+    },
+    {
+      sql: 'INSERT INTO leaderboard (exam_id, user_id, score, created_at) VALUES (?, ?, ?, ?)',
+      args: [examId, session.userId, score, now],
+    },
+  ]);
 
   return NextResponse.json({
     ok: true,

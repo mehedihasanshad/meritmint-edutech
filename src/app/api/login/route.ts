@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { getDb } from '@/lib/db';
+import { queryOne } from '@/lib/db';
 import { createSession } from '@/lib/auth';
 
 type UserRow = { id: number; username: string; password_hash: string };
@@ -14,10 +14,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'missing' }, { status: 400 });
   }
 
-  const db = getDb();
-  const user = db
-    .prepare('SELECT id, username, password_hash FROM users WHERE username = ?')
-    .get(username) as UserRow | undefined;
+  const user = await queryOne<UserRow>(
+    'SELECT id, username, password_hash FROM users WHERE username = ?',
+    [username]
+  );
 
   if (!user || !(await bcrypt.compare(password, user.password_hash))) {
     return NextResponse.json({ error: 'invalid' }, { status: 401 });

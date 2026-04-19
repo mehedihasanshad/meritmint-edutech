@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import { execute } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 
 export async function POST(req: Request) {
@@ -13,7 +13,8 @@ export async function POST(req: Request) {
   const transactionId =
     typeof body.transactionId === 'string' ? body.transactionId.trim() : '';
   const expiresDaysRaw = Number(body.expiresDays);
-  const expiresDays = Number.isFinite(expiresDaysRaw) && expiresDaysRaw > 0 ? expiresDaysRaw : 30;
+  const expiresDays =
+    Number.isFinite(expiresDaysRaw) && expiresDaysRaw > 0 ? expiresDaysRaw : 30;
 
   if (!transactionId) {
     return NextResponse.json({ error: 'missing-transaction' }, { status: 400 });
@@ -22,17 +23,17 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'invalid-course' }, { status: 400 });
   }
 
-  const expires = new Date(Date.now() + expiresDays * 24 * 60 * 60 * 1000).toISOString();
-  const db = getDb();
-  const info = db
-    .prepare(
-      'INSERT INTO purchases (user_id, course_id, transaction_id, expires_at) VALUES (?, ?, ?, ?)'
-    )
-    .run(session.userId, courseId, transactionId, expires);
+  const expires = new Date(
+    Date.now() + expiresDays * 24 * 60 * 60 * 1000
+  ).toISOString();
+  const res = await execute(
+    'INSERT INTO purchases (user_id, course_id, transaction_id, expires_at) VALUES (?, ?, ?, ?)',
+    [session.userId, courseId, transactionId, expires]
+  );
 
   return NextResponse.json({
     ok: true,
-    purchaseId: Number(info.lastInsertRowid),
+    purchaseId: res.lastInsertRowid ?? 0,
     expires,
   });
 }

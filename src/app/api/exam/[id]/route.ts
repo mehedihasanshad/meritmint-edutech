@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import { query, queryOne } from '@/lib/db';
 
 type ExamRow = { id: number; title: string; total_marks: number };
 type QuestionRow = {
@@ -20,19 +20,19 @@ export async function GET(
   if (!Number.isInteger(examId) || examId <= 0) {
     return NextResponse.json({ error: 'invalid-id' }, { status: 400 });
   }
-  const db = getDb();
-  const exam = db
-    .prepare('SELECT id, title, total_marks FROM exams WHERE id = ?')
-    .get(examId) as ExamRow | undefined;
+
+  const exam = await queryOne<ExamRow>(
+    'SELECT id, title, total_marks FROM exams WHERE id = ?',
+    [examId]
+  );
   if (!exam) {
     return NextResponse.json({ error: 'not-found' }, { status: 404 });
   }
 
-  const questions = db
-    .prepare(
-      'SELECT id, question, opt_a, opt_b, opt_c, opt_d FROM questions WHERE exam_id = ? ORDER BY id'
-    )
-    .all(examId) as QuestionRow[];
+  const questions = await query<QuestionRow>(
+    'SELECT id, question, opt_a, opt_b, opt_c, opt_d FROM questions WHERE exam_id = ? ORDER BY id',
+    [examId]
+  );
 
   return NextResponse.json({ exam, questions });
 }
