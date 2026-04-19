@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth';
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
 
 type Purchase = {
   id: number;
@@ -21,19 +21,16 @@ export default async function DashboardPage() {
   const session = await getSession();
   if (!session) redirect('/login?next=/dashboard');
 
-  const db = getDb();
-  const purchases = db
-    .prepare(
-      'SELECT id, course_id, transaction_id, expires_at FROM purchases WHERE user_id = ? ORDER BY id DESC'
-    )
-    .all(session.userId) as Purchase[];
-  const results = db
-    .prepare(
-      `SELECT r.id, r.exam_id, r.score, r.details, r.created_at, e.title
-       FROM results r JOIN exams e ON e.id = r.exam_id
-       WHERE r.user_id = ? ORDER BY r.created_at DESC`
-    )
-    .all(session.userId) as Result[];
+  const purchases = await query<Purchase>(
+    'SELECT id, course_id, transaction_id, expires_at FROM purchases WHERE user_id = ? ORDER BY id DESC',
+    [session.userId]
+  );
+  const results = await query<Result>(
+    `SELECT r.id, r.exam_id, r.score, r.details, r.created_at, e.title
+     FROM results r JOIN exams e ON e.id = r.exam_id
+     WHERE r.user_id = ? ORDER BY r.created_at DESC`,
+    [session.userId]
+  );
 
   return (
     <section className="mx-auto max-w-5xl px-4 py-10">

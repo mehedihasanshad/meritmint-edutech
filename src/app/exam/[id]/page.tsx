@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth';
-import { getDb } from '@/lib/db';
+import { query, queryOne } from '@/lib/db';
 import { ExamForm } from '@/components/ExamForm';
 
 type Exam = { id: number; title: string; total_marks: number };
@@ -24,17 +24,16 @@ export default async function ExamPage({
   if (!Number.isInteger(examId) || examId <= 0) notFound();
   if (!session) redirect(`/login?next=/exam/${examId}`);
 
-  const db = getDb();
-  const exam = db
-    .prepare('SELECT id, title, total_marks FROM exams WHERE id = ?')
-    .get(examId) as Exam | undefined;
+  const exam = await queryOne<Exam>(
+    'SELECT id, title, total_marks FROM exams WHERE id = ?',
+    [examId]
+  );
   if (!exam) notFound();
 
-  const questions = db
-    .prepare(
-      'SELECT id, question, opt_a, opt_b, opt_c, opt_d FROM questions WHERE exam_id = ? ORDER BY id'
-    )
-    .all(examId) as Question[];
+  const questions = await query<Question>(
+    'SELECT id, question, opt_a, opt_b, opt_c, opt_d FROM questions WHERE exam_id = ? ORDER BY id',
+    [examId]
+  );
 
   return (
     <section className="mx-auto max-w-3xl px-4 py-10">

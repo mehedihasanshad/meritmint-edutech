@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getDb } from '@/lib/db';
+import { query, queryOne } from '@/lib/db';
 
 type Row = {
   user_id: number;
@@ -19,20 +19,19 @@ export default async function LeaderboardPage({
   const examId = Number(raw);
   if (!Number.isInteger(examId) || examId <= 0) notFound();
 
-  const db = getDb();
-  const exam = db
-    .prepare('SELECT id, title FROM exams WHERE id = ?')
-    .get(examId) as Exam | undefined;
+  const exam = await queryOne<Exam>(
+    'SELECT id, title FROM exams WHERE id = ?',
+    [examId]
+  );
   if (!exam) notFound();
 
-  const rows = db
-    .prepare(
-      `SELECT l.user_id, l.score, l.created_at, u.username
-       FROM leaderboard l JOIN users u ON u.id = l.user_id
-       WHERE l.exam_id = ?
-       ORDER BY score DESC, created_at ASC LIMIT 50`
-    )
-    .all(examId) as Row[];
+  const rows = await query<Row>(
+    `SELECT l.user_id, l.score, l.created_at, u.username
+     FROM leaderboard l JOIN users u ON u.id = l.user_id
+     WHERE l.exam_id = ?
+     ORDER BY score DESC, created_at ASC LIMIT 50`,
+    [examId]
+  );
 
   return (
     <section className="mx-auto max-w-3xl px-4 py-10">

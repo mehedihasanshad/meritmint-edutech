@@ -1,12 +1,17 @@
 import Link from 'next/link';
-import { getDb } from '@/lib/db';
+import { query } from '@/lib/db';
 
 type Exam = { id: number; title: string; total_marks: number };
 
-export function ExamBatches() {
-  const exams = getDb()
-    .prepare('SELECT id, title, total_marks FROM exams ORDER BY id')
-    .all() as Exam[];
+export async function ExamBatches() {
+  let exams: Exam[] = [];
+  try {
+    exams = await query<Exam>(
+      'SELECT id, title, total_marks FROM exams ORDER BY id'
+    );
+  } catch {
+    exams = [];
+  }
 
   return (
     <section className="section">
