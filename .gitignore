@@ -5,5 +5,12 @@ out/
 *.log
 .env
 .env.local
+.env*.local
+.vercel/
+
+# SQLite local dev
+data/
 *.db
+*.db-shm
+*.db-wal
 *.sqlite
