@@ -1,39 +1,59 @@
-# MeritMint — Minimal Edutech Demo
+# MeritMint — Next.js Edutech Platform
 
-This repository is a minimal, runnable starting point for the MeritMint edutech platform you described. It includes:
+Minimal edutech demo rewritten on **Next.js 14 (App Router)**, TypeScript, Tailwind and SQLite.
 
-- Express backend (SQLite) with user auth (session), purchase-by-transaction-id, exam endpoints, submit scoring and a leaderboard.
-- Static frontend (glassmorphism style) showing hero/courses, purchase flow, login/register, exam-taking UI with immediate answer reveal and dashboard.
+## Features
 
-Note: This is a demo scaffold. Replace the logo images in `public/assets` with your attached MeritMint images to use your branding.
+- Register / login with bcrypt-hashed passwords and signed JWT cookie sessions (via `jose`).
+- Course purchase flow by transaction id (mock).
+- Exam taking with immediate per-question feedback and persisted results.
+- Dashboard (purchases + results) and per-exam leaderboard.
+- SQLite (better-sqlite3) with idempotent schema + seed, WAL mode, FK enforcement.
 
-Quick start
-
-1. Install dependencies
+## Quick start
 
 ```sh
-cd "/home/shad143/Documents/Vs Code MT Folder"
 npm install
-```
-
-2. Run the server
-
-```sh
+cp .env.local.example .env.local   # set AUTH_SECRET (>= 16 chars)
 npm run dev
 ```
 
-3. Open http://localhost:4000 in your browser.
+Open http://localhost:3000.
 
-How to use
+## Environment
 
-- Register or login via the Login button.
-- Buy a course by clicking Buy — enter a transaction id (any string) to simulate a purchase.
-- Take the demo exam in Running Exam Batches; after submitting you'll see immediate per-question feedback and your result saved to Dashboard.
+| Var          | Purpose                              |
+|--------------|--------------------------------------|
+| `AUTH_SECRET`| HMAC key used to sign session JWTs.  |
 
-Next steps to make it production-ready (suggested)
+## Project layout
 
-- Use hashed passwords (bcrypt) instead of plain text.
-- Use a proper authentication system (JWT/OAuth) and secure sessions.
-- Integrate payment gateway and validate transaction ids server-side.
-- Expand the question system to support images, code blocks, and time limits.
-- Add admin UI to create exam batches and import questions.
+```
+src/
+  app/              App Router pages + API route handlers
+    api/            register, login, logout, me, purchase, exams, exam/[id], submit, dashboard, leaderboard/[examId]
+    exam/[id]/      Exam taking page
+    leaderboard/[examId]/
+    dashboard/
+    login/
+  components/       Client components (forms, buttons)
+  lib/
+    db.ts           Singleton better-sqlite3 wrapper + schema/seed
+    auth.ts         JWT cookie session helpers
+data/meritmint.db   SQLite file (created on first run, git-ignored)
+```
+
+## Security notes / fixes applied
+
+- Passwords now bcrypt-hashed (previously plaintext).
+- Sessions are signed JWT cookies (`httpOnly`, `sameSite=lax`, `secure` in prod).
+- Input validation on every route; sensible HTTP status codes.
+- Correct answers never sent to the client in `GET /api/exam/:id`.
+- Foreign keys enforced; transactional inserts on exam submission.
+
+## Production TODO
+
+- Payment gateway integration + server-side transaction validation.
+- Admin UI for exam/question management.
+- Rate limiting on auth routes.
+- Question support for images, code blocks, timers, negative marking.
