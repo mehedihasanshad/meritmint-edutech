@@ -5,16 +5,49 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        accent: '#ff3b30',
-        ink: '#050505',
-        paper: '#fbf7f1',
-        bone: '#ece5d8',
-        lime: '#c6ff3d',
+        accent: '#ff3b30',        // dark red — primary accent
+        'accent-soft': '#ff7f78',  // light red — for light theme + highlights
+        'accent-deep': '#7a1a15',  // deeper red — for layered shadows / rings
+        ink: '#050000',            // dark black with warm undertone
+        paper: '#fff5f4',          // light cream with red undertone
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
-        display: ['var(--font-display)', 'Georgia', 'Times New Roman', 'serif'],
-        mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+        /* Latin sits first; Bangla codepoints fall through to Hind
+           Siliguri automatically — each glyph picks the font that
+           contains it, so "admission ২০২৬" has Latin in Plus Jakarta
+           Sans and Bangla in Hind Siliguri in the same string. */
+        sans: [
+          'var(--font-inter)',
+          'var(--font-bengali)',
+          'system-ui',
+          'Segoe UI',
+          'Roboto',
+          'Helvetica Neue',
+          'Arial',
+          'sans-serif',
+        ],
+        display: [
+          'var(--font-display)',
+          'var(--font-bengali-display)',
+          'var(--font-bengali)',
+          'Georgia',
+          'Times New Roman',
+          'serif',
+        ],
+        mono: [
+          'var(--font-mono)',
+          'var(--font-bengali)',
+          'ui-monospace',
+          'SFMono-Regular',
+          'Menlo',
+          'monospace',
+        ],
+        bengali: ['var(--font-bengali)', 'sans-serif'],
+        'bengali-display': [
+          'var(--font-bengali-display)',
+          'var(--font-bengali)',
+          'serif',
+        ],
       },
       fontSize: {
         'display-1': ['clamp(3.2rem, 9vw, 9rem)', { lineHeight: '0.92', letterSpacing: '-0.04em' }],
