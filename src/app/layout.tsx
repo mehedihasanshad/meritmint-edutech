@@ -1,33 +1,37 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import {
-  Plus_Jakarta_Sans,
-  Instrument_Serif,
-  JetBrains_Mono,
+  Geist,
+  Fraunces,
+  Geist_Mono,
   Hind_Siliguri,
   Noto_Serif_Bengali,
 } from 'next/font/google';
 import { getSession, isAdmin } from '@/lib/auth';
 import { MainNav } from '@/components/MainNav';
 
-// Latin body — Plus Jakarta Sans: modern, premium, warmer than Inter,
-// variable weight 200–800. Used by high-end product sites.
-const sans = Plus_Jakarta_Sans({
+// Latin body — Geist: Vercel's flagship sans. Technical, restrained,
+// optically refined at every size. Reads as "2025 product" the way
+// Helvetica used to read as "corporate". Variable weight 100–900.
+const sans = Geist({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800'],
   variable: '--font-inter',
   display: 'swap',
 });
-// Latin display — Instrument Serif italic: editorial, elegant.
-const display = Instrument_Serif({
+// Latin display — Fraunces: a variable serif with four axes — weight,
+// optical size (opsz), SOFT (curvature), and WONK (stylistic
+// alternates that rotate irregularly, giving headlines a human
+// imperfection). Used by editorial/fashion brands for premium
+// personality. Supports italic for the "italic-serif" accent moments.
+const display = Fraunces({
   subsets: ['latin'],
-  weight: '400',
   style: ['normal', 'italic'],
+  axes: ['SOFT', 'WONK', 'opsz'],
   variable: '--font-display',
   display: 'swap',
 });
-// Mono — JetBrains Mono: crisp tabular numerics.
-const mono = JetBrains_Mono({
+// Mono — Geist Mono: matches Geist, tabular numerics dialled in.
+const mono = Geist_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
   display: 'swap',
