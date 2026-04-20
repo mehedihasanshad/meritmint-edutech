@@ -17,7 +17,6 @@ function resolveUrl(): string {
   try {
     if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
   } catch {
-    // read-only fs (Vercel without Turso env): fall through to in-memory
     return ':memory:';
   }
   return `file:${path.join(dataDir, 'meritmint.db')}`;
@@ -93,16 +92,42 @@ const SCHEMA = `
     ON results(user_id, created_at DESC);
 `;
 
+const MIGRATIONS = [
+  `ALTER TABLE exams ADD COLUMN duration_minutes INTEGER NOT NULL DEFAULT 10`,
+  `ALTER TABLE exams ADD COLUMN negative_marks REAL NOT NULL DEFAULT 0`,
+  `ALTER TABLE exams ADD COLUMN pass_marks INTEGER NOT NULL DEFAULT 0`,
+  `ALTER TABLE exams ADD COLUMN description TEXT`,
+  `ALTER TABLE results ADD COLUMN time_taken_seconds INTEGER`,
+];
+
+async function runMigrations(db: Client): Promise<void> {
+  for (const stmt of MIGRATIONS) {
+    try {
+      await db.execute(stmt);
+    } catch {
+      // Duplicate column — already applied. libSQL / SQLite throws here.
+    }
+  }
+}
+
 async function initOnce(): Promise<void> {
   const db = getDb();
   await db.executeMultiple(SCHEMA);
+  await runMigrations(db);
 
   const existing = await db.execute('SELECT COUNT(*) AS n FROM exams');
   const n = Number(existing.rows[0]?.n ?? 0);
   if (n === 0) {
     const seed = await db.execute({
-      sql: 'INSERT INTO exams (title, total_marks) VALUES (?, ?)',
-      args: ['MeritMint Full Test — Demo (5 Qs)', 5],
+      sql: 'INSERT INTO exams (title, total_marks, duration_minutes, negative_marks, pass_marks, description) VALUES (?, ?, ?, ?, ?, ?)',
+      args: [
+        'MeritMint Full Test — Demo (5 Qs)',
+        5,
+        10,
+        0,
+        3,
+        'A short demo exam to warm up. 5 questions, 1 mark each, 10 minutes.',
+      ],
     });
     const examId = Number(seed.lastInsertRowid);
     const insertQ =
@@ -171,7 +196,14 @@ export async function execute(
 
 export async function batchWrite(
   stmts: { sql: string; args: InValue[] }[]
-): Promise<void> {
+): Promise<{ lastInsertRowids: (number | null)[] }> {
   await ensureDb();
-  await getDb().batch(stmts, 'write');
+  const res = await getDb().batch(stmts, 'write');
+  return {
+    lastInsertRowids: res.map((r) =>
+      r.lastInsertRowid === undefined || r.lastInsertRowid === null
+        ? null
+        : Number(r.lastInsertRowid)
+    ),
+  };
 }
