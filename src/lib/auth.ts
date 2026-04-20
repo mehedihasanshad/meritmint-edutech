@@ -53,3 +53,27 @@ export async function destroySession(): Promise<void> {
   const store = await cookies();
   store.delete(COOKIE_NAME);
 }
+
+export function isAdmin(session: SessionPayload | null): boolean {
+  if (!session) return false;
+  const list = (process.env.ADMIN_USERNAMES || '')
+    .split(',')
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean);
+  return list.includes(session.username.toLowerCase());
+}
+
+export async function requireAdmin(): Promise<SessionPayload> {
+  const session = await getSession();
+  if (!session || !isAdmin(session)) {
+    throw new AdminDenied();
+  }
+  return session;
+}
+
+export class AdminDenied extends Error {
+  constructor() {
+    super('admin-only');
+    this.name = 'AdminDenied';
+  }
+}
