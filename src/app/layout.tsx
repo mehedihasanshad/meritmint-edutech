@@ -61,9 +61,9 @@ export const metadata: Metadata = {
 const themeInitScript = `(() => {
   try {
     const stored = localStorage.getItem('theme');
-    const theme = stored === 'light' || stored === 'dark'
-      ? stored
-      : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    // Default is dark. Light is opt-in via the toggle, regardless of
+    // the OS-level prefers-color-scheme setting.
+    const theme = stored === 'light' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', theme);
   } catch (e) {
     document.documentElement.setAttribute('data-theme', 'dark');
