@@ -1,13 +1,22 @@
 import Link from 'next/link';
 import { query } from '@/lib/db';
 
-type Exam = { id: number; title: string; total_marks: number };
+type Exam = {
+  id: number;
+  title: string;
+  total_marks: number;
+  duration_minutes: number;
+  pass_marks: number;
+  question_count: number;
+};
 
 export async function ExamBatches() {
   let exams: Exam[] = [];
   try {
     exams = await query<Exam>(
-      'SELECT id, title, total_marks FROM exams ORDER BY id'
+      `SELECT e.id, e.title, e.total_marks, e.duration_minutes, e.pass_marks,
+              (SELECT COUNT(*) FROM questions q WHERE q.exam_id = e.id) AS question_count
+       FROM exams e ORDER BY e.id DESC`
     );
   } catch {
     exams = [];
@@ -39,7 +48,7 @@ export async function ExamBatches() {
       ) : (
         <ul className="grid gap-3 md:grid-cols-2">
           {exams.map((e) => (
-            <li key={e.id} className="card-tilt flex items-center justify-between gap-4">
+            <li key={e.id} className="card-tilt flex flex-col gap-4">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="inline-block h-2 w-2 rounded-full bg-accent animate-ticker-pulse" />
@@ -48,9 +57,14 @@ export async function ExamBatches() {
                   </span>
                 </div>
                 <h3 className="mt-2 font-display text-2xl leading-tight">{e.title}</h3>
-                <p className="mt-1 text-xs text-dim">
-                  Total marks: <span className="font-mono">{e.total_marks}</span>
-                </p>
+                <dl className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-muted">
+                  <Tag label="Questions" value={e.question_count} />
+                  <Tag label="Marks" value={e.total_marks} />
+                  <Tag label="Duration" value={`${e.duration_minutes} min`} />
+                  {e.pass_marks > 0 && (
+                    <Tag label="Pass" value={e.pass_marks} />
+                  )}
+                </dl>
               </div>
               <div className="flex flex-shrink-0 gap-2">
                 <Link href={`/leaderboard/${e.id}`} className="btn-pill btn-pill-ghost text-xs">
@@ -71,5 +85,16 @@ export async function ExamBatches() {
 function Live() {
   return (
     <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-ticker-pulse" />
+  );
+}
+
+function Tag({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div>
+      <dt className="text-[0.6rem] uppercase tracking-[0.15em] text-dim">
+        {label}
+      </dt>
+      <dd className="font-mono text-sm text-fg">{value}</dd>
+    </div>
   );
 }

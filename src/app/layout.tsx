@@ -2,7 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Inter, Instrument_Serif, JetBrains_Mono } from 'next/font/google';
-import { getSession } from '@/lib/auth';
+import { getSession, isAdmin } from '@/lib/auth';
 import { LogoutButton } from '@/components/LogoutButton';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { NavLogo } from '@/components/NavLogo';
@@ -69,6 +69,11 @@ export default async function RootLayout({
                 <span className="hidden text-sm text-white/70 sm:inline">
                   Hi, {session.username}
                 </span>
+                {isAdmin(session) && (
+                  <Link href="/admin" className="btn-ghost">
+                    Admin
+                  </Link>
+                )}
                 <Link href="/dashboard" className="btn-ghost">
                   Dashboard
                 </Link>
