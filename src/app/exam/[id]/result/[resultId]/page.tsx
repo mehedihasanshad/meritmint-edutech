@@ -137,13 +137,13 @@ export default async function ResultPage({
         <ResultRing score={result.score} total={exam.total_marks} passed={passed} />
 
         <dl className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <StatTile k="Correct" v={parsed.totals.correct} accent="emerald" />
+          <StatTile k="Correct" v={parsed.totals.correct} accent="fg" />
           <StatTile k="Wrong" v={parsed.totals.wrong} accent="red" />
           <StatTile k="Skipped" v={parsed.totals.skipped} accent="muted" />
           <StatTile
             k="Percentage"
             v={`${pct}%`}
-            accent={passed ? 'emerald' : 'red'}
+            accent={passed ? 'fg' : 'red'}
           />
           <StatTile
             k="Time taken"
@@ -233,9 +233,9 @@ export default async function ResultPage({
                         key={k}
                         className={`flex items-start gap-2 rounded-md px-2 py-1 ${
                           isRight
-                            ? 'bg-emerald-500/10 text-emerald-300'
+                            ? 'review-option-correct'
                             : isYours
-                            ? 'bg-red-500/10 text-red-300'
+                            ? 'review-option-wrong'
                             : 'text-muted'
                         }`}
                       >
@@ -265,16 +265,20 @@ function StatTile({
 }: {
   k: string;
   v: React.ReactNode;
-  accent: 'emerald' | 'red' | 'muted';
+  accent: 'fg' | 'red' | 'muted';
 }) {
   const color =
-    accent === 'emerald'
-      ? 'text-emerald-300'
-      : accent === 'red'
-      ? 'accent-red'
-      : 'text-fg';
+    accent === 'red' ? 'accent-red' : accent === 'muted' ? 'text-muted' : 'text-fg';
   return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+    <div
+      className="rounded-xl p-4"
+      style={{
+        background: 'var(--glass-bg)',
+        border: '1px solid var(--glass-border)',
+        backdropFilter: 'blur(14px) saturate(160%)',
+        WebkitBackdropFilter: 'blur(14px) saturate(160%)',
+      }}
+    >
       <dt className="text-[0.62rem] uppercase tracking-[0.18em] text-dim">
         {k}
       </dt>
@@ -298,7 +302,7 @@ function ResultRing({
   const radius = 80;
   const circumference = 2 * Math.PI * radius;
   const dash = (pct / 100) * circumference;
-  const color = passed ? '#22c55e' : '#ff3b30';
+  const color = passed ? 'rgba(255, 255, 255, 0.9)' : '#ff3b30';
   return (
     <div className="result-ring">
       <svg width="200" height="200" viewBox="0 0 200 200">

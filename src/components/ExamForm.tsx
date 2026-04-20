@@ -458,9 +458,9 @@ function Tile({
 }) {
   const toneClass =
     tone === 'ok'
-      ? 'text-emerald-300'
+      ? 'text-fg'
       : tone === 'warn'
-      ? 'text-accent'
+      ? 'accent-red'
       : 'text-muted';
   return (
     <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3">

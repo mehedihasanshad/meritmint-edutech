@@ -100,7 +100,7 @@ export function QuestionsManager({
                         key={k}
                         className={
                           isCorrect
-                            ? 'text-emerald-400'
+                            ? 'review-option-correct rounded-md px-2 py-1'
                             : 'text-muted'
                         }
                       >
