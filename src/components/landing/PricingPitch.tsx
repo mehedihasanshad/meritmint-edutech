@@ -1,6 +1,6 @@
 export function PricingPitch() {
   return (
-    <section className="section">
+    <section id="pricing" className="section">
       <div className="grid gap-10 md:grid-cols-2 md:items-center">
         <div>
           <span className="eyebrow">The Money Part</span>

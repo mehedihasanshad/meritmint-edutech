@@ -23,7 +23,7 @@ export async function ExamBatches() {
   }
 
   return (
-    <section className="section">
+    <section id="exams" className="section">
       <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div className="max-w-2xl">
           <span className="eyebrow">

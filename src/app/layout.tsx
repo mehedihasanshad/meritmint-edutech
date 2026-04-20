@@ -1,17 +1,24 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { Inter, Instrument_Serif, JetBrains_Mono } from 'next/font/google';
+import {
+  Plus_Jakarta_Sans,
+  Instrument_Serif,
+  JetBrains_Mono,
+  Hind_Siliguri,
+  Noto_Serif_Bengali,
+} from 'next/font/google';
 import { getSession, isAdmin } from '@/lib/auth';
-import { LogoutButton } from '@/components/LogoutButton';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import { NavLogo } from '@/components/NavLogo';
+import { MainNav } from '@/components/MainNav';
 
-const inter = Inter({
+// Latin body — Plus Jakarta Sans: modern, premium, warmer than Inter,
+// variable weight 200–800. Used by high-end product sites.
+const sans = Plus_Jakarta_Sans({
   subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
   variable: '--font-inter',
   display: 'swap',
 });
+// Latin display — Instrument Serif italic: editorial, elegant.
 const display = Instrument_Serif({
   subsets: ['latin'],
   weight: '400',
@@ -19,9 +26,29 @@ const display = Instrument_Serif({
   variable: '--font-display',
   display: 'swap',
 });
+// Mono — JetBrains Mono: crisp tabular numerics.
 const mono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
+  display: 'swap',
+});
+// Bengali body — Hind Siliguri: the industry-standard Bangla web
+// typeface for Bangladeshi digital products. Comprehensive Unicode
+// coverage including every conjunct used in modern Bangla, five
+// weights, proven rendering across browsers and low-end devices.
+const bengali = Hind_Siliguri({
+  subsets: ['bengali', 'latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-bengali',
+  display: 'swap',
+});
+// Bengali display — Noto Serif Bengali: used only for large editorial
+// headlines where a serif contrast is desirable. Hind Siliguri handles
+// everything else.
+const bengaliDisplay = Noto_Serif_Bengali({
+  subsets: ['bengali', 'latin'],
+  weight: ['400', '600', '700'],
+  variable: '--font-bengali-display',
   display: 'swap',
 });
 
@@ -53,7 +80,7 @@ export default async function RootLayout({
     <html
       lang="en"
       data-theme="dark"
-      className={`${inter.variable} ${display.variable} ${mono.variable}`}
+      className={`${sans.variable} ${display.variable} ${mono.variable} ${bengali.variable} ${bengaliDisplay.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -62,30 +89,10 @@ export default async function RootLayout({
       <body>
         <div className="noise-overlay" aria-hidden />
         <header className="site-header">
-          <NavLogo />
-          <nav className="flex items-center gap-2">
-            {session ? (
-              <>
-                <span className="hidden text-sm text-white/70 sm:inline">
-                  Hi, {session.username}
-                </span>
-                {isAdmin(session) && (
-                  <Link href="/admin" className="btn-ghost">
-                    Admin
-                  </Link>
-                )}
-                <Link href="/dashboard" className="btn-ghost">
-                  Dashboard
-                </Link>
-                <LogoutButton />
-              </>
-            ) : (
-              <Link href="/login" className="btn-ghost">
-                Login / Register
-              </Link>
-            )}
-            <ThemeToggle />
-          </nav>
+          <MainNav
+            username={session?.username ?? null}
+            isAdminUser={isAdmin(session)}
+          />
         </header>
         <main>{children}</main>
       </body>
