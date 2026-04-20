@@ -1,27 +1,23 @@
 const QA = [
   {
-    q: "Bhai, I'm 2 months out. Am I cooked?",
-    a: "No. Crash Course exists for exactly this. 6 weeks of sprint lessons + the highest-weightage chapters. A lot of last year's toppers started from here.",
+    q: 'ভাই, ২ মাস বাকি। আমি কি শেষ?',
+    a: 'একদম না। Crash Course এই জন্যই আছে। ৬ সপ্তাহের sprint lesson + highest-weightage chapter। গত cycle-এর অনেক topper এখান থেকেই শুরু করেছিল।',
   },
   {
-    q: "How are these different from 10MS / Shikho?",
-    a: "We only do admission prep — not school syllabus. Smaller batches, real mentors, ranked mocks. We can't match 10MS on scale; they can't match us on focus.",
+    q: '10MS / Shikho থেকে এটা কতটা আলাদা?',
+    a: 'আমরা শুধু admission prep করি — school syllabus না। ছোট ব্যাচ, real topper mentor, ranked mock। Focus-এ ওরা আমাদের match করতে পারবে না।',
   },
   {
-    q: "What if the video buffers? My area has bad net.",
-    a: "Every lesson is downloadable. PDFs work offline. Printed books ship to you. You can prepare with one bar of signal.",
+    q: 'আমার এলাকায় net ভালো না, video বাফার করলে কী হবে?',
+    a: 'সব lesson download করা যায়। PDF offline চলে। Printed বই পৌঁছে দেই বাড়িতে। এক দাগ signal-এও প্রস্তুতি চালানো যাবে।',
   },
   {
-    q: "What if I don't get in?",
-    a: "We're honest: nothing guarantees admission. What we guarantee is that you walk in without gaps you didn't know you had. Full refund in the first 14 days, no questions asked.",
+    q: 'যদি admission না হয়?',
+    a: 'সৎভাবে বলি: কোনো platform guarantee দিতে পারে না। আমরা guarantee দিই — তুমি যেসব gap আছে সেগুলো জেনে exam hall-এ ঢুকবে। প্রথম ১৪ দিনে refund চাইলে full refund।',
   },
   {
-    q: "My parents want receipts. Do you give one?",
-    a: "Yes. Proper invoice with batch, duration, and everything listed. Your guardian gets weekly progress email too, if you want.",
-  },
-  {
-    q: "Scholarships real?",
-    a: "Real. We give 60–100% off to ~400 students per cycle based on need. One form, no photo of you holding certificates. We believe you.",
+    q: 'Payment কীভাবে করবো?',
+    a: 'bKash, Nagad, Rocket — যেকোনোটা। Card-ও কাজ করে। দুই installment-এ ভাগ করেও দিতে পারো।',
   },
 ];
 
@@ -29,11 +25,13 @@ export function FAQ() {
   return (
     <section id="faq" className="section">
       <div className="mb-10 max-w-2xl">
-        <span className="eyebrow">Straight answers</span>
+        <span className="eyebrow">সোজা উত্তর</span>
         <h2 className="display-headline mt-4">
-          The questions
+          <span lang="bn">যেসব প্রশ্ন</span>
           <br />
-          <span className="italic-serif">everyone actually asks.</span>
+          <span lang="bn" className="italic-serif">
+            সবাই আসলেই জিজ্ঞেস করে।
+          </span>
         </h2>
       </div>
 
@@ -44,13 +42,17 @@ export function FAQ() {
               <span className="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-dim">
                 student
               </span>
-              <p className="mt-1">{qa.q}</p>
+              <p className="mt-1" lang="bn">
+                {qa.q}
+              </p>
             </div>
             <div className="bubble bubble-a">
               <span className="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-white/80">
                 meritmint
               </span>
-              <p className="mt-1">{qa.a}</p>
+              <p className="mt-1" lang="bn">
+                {qa.a}
+              </p>
             </div>
           </div>
         ))}

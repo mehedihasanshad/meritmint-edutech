@@ -1,24 +1,45 @@
-const ITEMS = [
-  '342 students solving Physics Ch. 4 right now',
-  'Medical prep batch — 87% seats filled',
-  '12 toppers online · answering doubts',
-  'New: HSC ICT মডেল টেস্ট dropped this morning',
-  '১৪,২০০+ students practicing this week',
-  'Fahim (BUET CSE \'24) teaching Math Ch. 9 at 9pm',
-  'Last mock paper downloaded 2,381 times',
-  'Tonight: Chemistry live doubt session · free',
+'use client';
+
+import { useEffect, useState } from 'react';
+
+const NOTICES = [
+  '🔴 Medical Admission ২০২৬ batch — শেষ ১২% আসন বাকি',
+  '📣 আজ রাত ৯টায়: Physics Ch. 9 live doubt clearing — সবার জন্য ফ্রি',
+  '📖 নতুন: HSC ICT মডেল টেস্ট drop হয়েছে · ১,২০০+ download in 2 ঘণ্টা',
 ];
 
+const INTERVAL_MS = 5000;
+
 export function SocialTicker() {
-  const doubled = [...ITEMS, ...ITEMS];
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(
+      () => setIdx((i) => (i + 1) % NOTICES.length),
+      INTERVAL_MS
+    );
+    return () => clearInterval(t);
+  }, []);
+
   return (
-    <div className="ticker-strip" role="marquee">
-      <div className="ticker-track">
-        {doubled.map((t, i) => (
-          <span key={i} className="flex items-center">
-            <span className="ticker-dot" />
-            {t}
+    <div className="broadcast-strip" role="status" aria-live="polite">
+      <div className="broadcast-inner" lang="bn">
+        {NOTICES.map((n, i) => (
+          <span
+            key={i}
+            className={`broadcast-item ${i === idx ? 'active' : ''}`}
+            aria-hidden={i !== idx}
+          >
+            {n}
           </span>
+        ))}
+      </div>
+      <div className="broadcast-dots" aria-hidden>
+        {NOTICES.map((_, i) => (
+          <span
+            key={i}
+            className={`broadcast-dot ${i === idx ? 'active' : ''}`}
+          />
         ))}
       </div>
     </div>

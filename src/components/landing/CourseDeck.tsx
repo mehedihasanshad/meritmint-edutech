@@ -7,46 +7,46 @@ const COURSES = [
     id: 1,
     tag: 'Full-Length',
     title: 'Course in Depth',
-    tagline: 'The whole syllabus, properly.',
-    price: '৳3,200',
-    length: '16 weeks',
+    tagline: 'পুরো syllabus, ঠিকঠাক।',
+    price: '৳৩,২০০',
+    length: '১৬ সপ্তাহ',
     deliverables: [
-      '124 recorded lessons · all subjects',
-      'Weekly live doubt clearing',
+      '১২৪ recorded lesson · সব subject',
+      'সাপ্তাহিক live doubt session',
       'Chapter-wise notes (PDF)',
-      'Full-length mock × 8',
+      'Full-length mock × ৮',
     ],
-    for: 'If you\'re starting 3+ months out and you want the real thing.',
+    for: 'Admission যদি ৩+ মাস দূরে, আর সিরিয়াসলি preparation চাও।',
   },
   {
     id: 2,
     tag: 'Hot',
     title: 'Crash Course',
-    tagline: 'Sharp, fast, ruthless.',
-    price: '৳1,800',
-    length: '6 weeks',
+    tagline: 'ধারালো, দ্রুত, নির্দয়।',
+    price: '৳১,৮০০',
+    length: '৬ সপ্তাহ',
     deliverables: [
-      '48 recorded sprint lessons',
-      'High-weightage chapter drills',
-      'Condensed summary sheets',
-      'Mock papers × 4',
+      '৪৮ recorded sprint lesson',
+      'High-weightage chapter drill',
+      'Condensed summary sheet',
+      'Mock paper × ৪',
     ],
-    for: 'Six weeks out and panicking? Read this, then breathe.',
+    for: '৬ সপ্তাহ বাকি, panic হচ্ছে? শ্বাস নাও, এটা দেখো।',
   },
   {
     id: 3,
     tag: 'Recorded',
     title: 'Sure Shot',
-    tagline: 'Repeat it till you own it.',
-    price: '৳1,100',
+    tagline: 'যতদিন না আয়ত্তে, ততদিন দেখে যাও।',
+    price: '৳১,১০০',
     length: 'lifetime access',
     deliverables: [
-      'Pre-recorded, self-paced',
-      'Topic hunting by past-paper weight',
+      'Pre-recorded · self-paced',
+      'Past-paper weight অনুযায়ী topic hunting',
       'Revision-mode notes',
-      'Mock papers × 2',
+      'Mock paper × ২',
     ],
-    for: 'Second-timers, repeaters, or anyone who learns best alone.',
+    for: 'Second-timer, repeater — যে একা পড়তে ভালোবাসে, তার জন্য।',
   },
 ];
 
@@ -55,16 +55,18 @@ export function CourseDeck() {
     <section id="courses" className="section">
       <div className="mb-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div className="max-w-3xl">
-          <span className="eyebrow">Three Ways In</span>
+          <span className="eyebrow">তিনভাবে ঢোকো</span>
           <h2 className="display-headline mt-4">
-            Pick the one that fits
+            <span lang="bn">তোমার সময়ের সাথে</span>
             <br />
-            <span className="italic-serif">your runway.</span>
+            <span lang="bn" className="italic-serif">
+              খাপ খায় এমন একটা।
+            </span>
           </h2>
         </div>
-        <p className="max-w-md text-muted md:text-right">
-          Every course is admission-grade. The difference is pace — not
-          quality. No "premium plan" locking you out of the good stuff.
+        <p className="max-w-md text-muted md:text-right" lang="bn">
+          প্রতিটা course admission-grade। পার্থক্য শুধু গতিতে — quality-তে না।
+          কোনো "premium plan" নেই যেটা ভালো জিনিস lock করে রাখবে।
         </p>
       </div>
 
@@ -124,10 +126,10 @@ export function CourseDeck() {
         ))}
       </div>
 
-      <div className="mt-10 text-center text-sm text-dim">
-        Not sure which?{' '}
+      <div className="mt-10 text-center text-sm text-dim" lang="bn">
+        কোনটা নিবে বুঝতে পারছ না?{' '}
         <Link href="#faq" className="underline underline-offset-4">
-          Read how we'd pick for you →
+          আমরা কীভাবে choose করতাম পড়ে নাও →
         </Link>
       </div>
     </section>

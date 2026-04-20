@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const CHAOS_WORDS = [
   'ch. 7 revision…',
@@ -37,6 +37,7 @@ type Chaos = {
 
 export function Hero() {
   const [calm, setCalm] = useState(false);
+  const stageRef = useRef<HTMLElement | null>(null);
 
   const chaos = useMemo<Chaos[]>(() => {
     return CHAOS_WORDS.map((text, i) => ({
@@ -55,74 +56,130 @@ export function Hero() {
     return () => clearTimeout(t);
   }, []);
 
+  // Mouse parallax on the banner + floating chips
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+    let raf = 0;
+    const onMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        el.style.setProperty('--mx', String(x));
+        el.style.setProperty('--my', String(y));
+      });
+    };
+    const onLeave = () => {
+      cancelAnimationFrame(raf);
+      el.style.setProperty('--mx', '0');
+      el.style.setProperty('--my', '0');
+    };
+    el.addEventListener('mousemove', onMove);
+    el.addEventListener('mouseleave', onLeave);
+    return () => {
+      el.removeEventListener('mousemove', onMove);
+      el.removeEventListener('mouseleave', onLeave);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
-    <section className="hero-stage">
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        {!calm &&
-          chaos.map((c) => (
-            <span
-              key={c.id}
-              className="chaos-word"
-              style={{
-                top: c.top,
-                left: c.left,
-                animationDelay: `${c.delay}ms`,
-                ['--dx' as string]: c.dx,
-                ['--dy' as string]: c.dy,
-              }}
-            >
-              {c.text}
-            </span>
-          ))}
-      </div>
+    <section className="hero-stage" ref={stageRef}>
+      <div aria-hidden className="hero-dot-grid" />
 
       <div className="section relative z-10 flex w-full flex-col items-start gap-8 md:gap-10">
         <span className="kicker-tag">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-ticker-pulse" />
-          Admission '26 · Batches live now
+          <span lang="bn">এডমিশন ২০২৬</span> · ব্যাচ চলছে এখনই
         </span>
 
-        <h1 className="display-giant max-w-[14ch]">
-          Tension{' '}
-          <span className="strike-through-red italic-serif">gone</span>.
-          <br />
-          Grades <span className="accent-red">on</span>.
-        </h1>
+        <div className="hero-banner-wrap">
+          <div className="hero-banner-glow" aria-hidden />
+          <div className="hero-banner-frame">
+            <Image
+              src="/banner-dark.jpg"
+              alt="MeritMint — Tension Gone. Grades On."
+              width={1280}
+              height={720}
+              priority
+              className="hero-banner-img hero-banner-dark"
+            />
+            <Image
+              src="/banner-light.jpg"
+              alt=""
+              aria-hidden
+              width={1280}
+              height={720}
+              priority
+              className="hero-banner-img hero-banner-light"
+            />
+            <div className="hero-banner-shine" aria-hidden />
+          </div>
 
-        <p className="max-w-[46ch] text-base leading-relaxed text-muted md:text-lg">
-          An admission-prep platform built by people who actually cracked the
-          exam — not a coaching-center brochure. Notes that don't waste your
-          night. Mocks that mirror the real paper. Mentors who pick up the
-          phone. <span className="italic-serif text-fg">Bhai, start today.</span>
+          <div aria-hidden className="hero-banner-chaos">
+            {!calm &&
+              chaos.map((c) => (
+                <span
+                  key={c.id}
+                  className="chaos-word"
+                  style={{
+                    top: c.top,
+                    left: c.left,
+                    animationDelay: `${c.delay}ms`,
+                    ['--dx' as string]: c.dx,
+                    ['--dy' as string]: c.dy,
+                  }}
+                >
+                  {c.text}
+                </span>
+              ))}
+          </div>
+
+          <FloatingChip className="chip-tl" depth={18}>
+            <span className="chip-num">৪৭</span>
+            <span className="chip-label" lang="bn">
+              calibrated mock
+            </span>
+          </FloatingChip>
+          <FloatingChip className="chip-tr" depth={-22}>
+            <span className="chip-num">২,৮৪৭</span>
+            <span className="chip-label" lang="bn">
+              placed · গত ৩ cycle
+            </span>
+          </FloatingChip>
+          <FloatingChip className="chip-br" depth={14}>
+            <span className="chip-dot" />
+            <span className="chip-label" lang="bn">
+              DMC · BUET · DU · IBA
+            </span>
+          </FloatingChip>
+        </div>
+
+        <p className="max-w-[54ch] text-base leading-relaxed text-muted md:text-lg">
+          <span lang="bn">
+            MeritMint হচ্ছে সেই admission prep platform — যেটা বানিয়েছে সেই
+            ভাইয়া-আপুরা যারা নিজেরা HSC পেরিয়ে Medical, BUET, DU-তে পৌঁছেছে।
+            রাত নষ্ট করে এমন notes না, আসল exam-এর মতো calibrated mock, আর
+            doubt-এ phone ধরে এমন mentor।
+          </span>{' '}
+          <span lang="bn" className="italic-serif text-fg">
+            ভাই, আজই শুরু করো।
+          </span>
         </p>
 
         <div className="flex flex-wrap items-center gap-3">
           <Link href="#courses" className="btn-pill btn-pill-primary">
-            See the courses
+            <span lang="bn">কোর্স দেখো</span>
             <ArrowIcon />
           </Link>
           <Link href="/login" className="btn-pill btn-pill-ghost">
-            Free trial · 3 days
+            <span lang="bn">৩ দিন ফ্রি ট্রায়াল</span>
           </Link>
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-dim">
-          <Tick /> 14,200+ students prepping right now
-          <span className="text-dim">·</span>
-          <Tick /> ₹/৳ 3,200 all-in · no upsell
-          <span className="text-dim">·</span>
-          <Tick /> 48 toppers on the other end
-        </div>
       </div>
-
-      <Image
-        src="/logo-icon.png"
-        alt=""
-        aria-hidden
-        width={500}
-        height={500}
-        className="pointer-events-none absolute right-[-10%] top-1/2 hidden w-[42vw] max-w-[620px] -translate-y-1/2 opacity-[0.09] md:block"
-      />
     </section>
   );
 }
@@ -136,10 +193,21 @@ function ArrowIcon() {
   );
 }
 
-function Tick() {
+function FloatingChip({
+  className = '',
+  depth = 10,
+  children,
+}: {
+  className?: string;
+  depth?: number;
+  children: React.ReactNode;
+}) {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff3b30" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="inline-block">
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
+    <div
+      className={`hero-chip ${className}`}
+      style={{ ['--chip-depth' as string]: `${depth}` }}
+    >
+      {children}
+    </div>
   );
 }

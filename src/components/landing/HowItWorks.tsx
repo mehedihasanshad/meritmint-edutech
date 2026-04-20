@@ -1,39 +1,41 @@
 export function HowItWorks() {
   const steps = [
     {
-      n: '01',
-      title: 'Tell us your runway',
+      n: '০১',
+      title: 'তোমার runway বলো',
       body:
-        'How many days till your admission? We place you in the right batch — Deep, Crash, or Recorded — in one form.',
+        'Admission কত দিন বাকি? এক form পূরণ করলে আমরা সঠিক ব্যাচে বসিয়ে দিই — Deep, Crash, বা Recorded।',
     },
     {
-      n: '02',
-      title: 'We hand you the plan',
+      n: '০২',
+      title: 'পরিকল্পনা আমরা দিই',
       body:
-        'Week-by-week roadmap. The exact chapters that carry 80% of past marks. A dashboard your parents can actually read.',
+        'Week-by-week roadmap। কোন chapter past paper-এ ৮০% মার্ক বহন করে — exact list। মা-বাবাও dashboard পড়তে পারবেন।',
     },
     {
-      n: '03',
-      title: 'You show up. We match it.',
+      n: '০৩',
+      title: 'তুমি পড়ো, আমরা match করি',
       body:
-        'Daily lessons. Weekly mocks. 1-tap doubt chat. Your rank moves. On exam day you walk in knowing what\'s coming.',
+        'প্রতিদিন lesson। প্রতি সপ্তাহে mock। 1-tap doubt chat। Rank move করে। Exam-এর দিন তুমি জেনে ঢোকো — কী আসছে।',
     },
   ];
 
   return (
-    <section className="section">
+    <section id="how" className="section">
       <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div className="max-w-2xl">
-          <span className="eyebrow">How this goes</span>
+          <span className="eyebrow">কীভাবে চলে</span>
           <h2 className="display-headline mt-4">
-            Three steps.
+            <span lang="bn">তিন ধাপ।</span>
             <br />
-            <span className="italic-serif">No funnel tricks.</span>
+            <span lang="bn" className="italic-serif">
+              কোনো funnel trick নেই।
+            </span>
           </h2>
         </div>
-        <p className="max-w-md text-muted md:text-right">
-          We won't email you 47 times before you're allowed to try. Here's the
-          whole thing, laid out.
+        <p className="max-w-md text-muted md:text-right" lang="bn">
+          তোমাকে ৪৭টা email করে harass করবো না আগে try করতে দেওয়ার আগে।
+          পুরো system নিচে — পরিষ্কার।
         </p>
       </div>
 
@@ -46,10 +48,12 @@ export function HowItWorks() {
                 step
               </span>
             </div>
-            <h3 className="mt-4 font-display text-[1.8rem] leading-tight">
+            <h3 className="mt-4 font-display text-[1.8rem] leading-tight" lang="bn">
               {s.title}
             </h3>
-            <p className="mt-3 text-sm leading-relaxed text-muted">{s.body}</p>
+            <p className="mt-3 text-sm leading-relaxed text-muted" lang="bn">
+              {s.body}
+            </p>
           </li>
         ))}
       </ol>

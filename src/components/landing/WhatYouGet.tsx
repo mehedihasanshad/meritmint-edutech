@@ -61,13 +61,12 @@ export function WhatYouGet() {
           </p>
         </Panel>
 
-        <Panel className="md:col-span-4" tone="glass">
+        <Panel className="md:col-span-6" tone="glass">
           <span className="kicker-tag">
             <Dot /> Leaderboard
           </span>
           <h3 className="mt-5 font-display text-3xl leading-tight">
-            Rank before you
-            <br />
+            Rank before you{' '}
             <span className="italic-serif">rank.</span>
           </h3>
           <p className="mt-3 text-sm text-muted">
@@ -76,28 +75,12 @@ export function WhatYouGet() {
           </p>
         </Panel>
 
-        <Panel className="md:col-span-4" tone="dark">
-          <span className="kicker-tag">
-            <Dot /> Resource Books
-          </span>
-          <h3 className="mt-5 font-display text-3xl leading-tight">
-            Printed. Shipped.
-            <br />
-            <span className="italic-serif">Actually useful.</span>
-          </h3>
-          <p className="mt-3 text-sm text-muted">
-            Past-paper digest, formula booklet, weakness workbook — delivered
-            nationwide within 4 days. Or read the PDFs. Whichever.
-          </p>
-        </Panel>
-
-        <Panel className="md:col-span-4" tone="accent-soft">
+        <Panel className="md:col-span-6" tone="accent-soft">
           <span className="kicker-tag">
             <Dot /> Exam-Day Kit
           </span>
           <h3 className="mt-5 font-display text-3xl leading-tight">
-            One-page plan for the
-            <br />
+            One-page plan for the{' '}
             <span className="italic-serif">last 48 hours.</span>
           </h3>
           <p className="mt-3 text-sm text-muted">
