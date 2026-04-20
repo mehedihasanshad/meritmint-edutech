@@ -3,7 +3,16 @@ import { getSession } from '@/lib/auth';
 import { query, queryOne } from '@/lib/db';
 import { ExamForm } from '@/components/ExamForm';
 
-type Exam = { id: number; title: string; total_marks: number };
+type Exam = {
+  id: number;
+  title: string;
+  description: string | null;
+  total_marks: number;
+  duration_minutes: number;
+  negative_marks: number;
+  pass_marks: number;
+};
+
 type Question = {
   id: number;
   question: string;
@@ -25,7 +34,8 @@ export default async function ExamPage({
   if (!session) redirect(`/login?next=/exam/${examId}`);
 
   const exam = await queryOne<Exam>(
-    'SELECT id, title, total_marks FROM exams WHERE id = ?',
+    `SELECT id, title, description, total_marks, duration_minutes,
+            negative_marks, pass_marks FROM exams WHERE id = ?`,
     [examId]
   );
   if (!exam) notFound();
@@ -35,13 +45,16 @@ export default async function ExamPage({
     [examId]
   );
 
-  return (
-    <section className="mx-auto max-w-3xl px-4 py-10">
-      <h1 className="text-2xl font-semibold">{exam.title}</h1>
-      <p className="mt-1 text-sm text-white/60">
-        {questions.length} questions · 1 mark each
-      </p>
-      <ExamForm examId={exam.id} questions={questions} />
-    </section>
-  );
+  if (questions.length === 0) {
+    return (
+      <section className="section">
+        <h1 className="display-headline">{exam.title}</h1>
+        <p className="mt-4 italic-serif text-muted">
+          This exam has no questions yet. Check back soon.
+        </p>
+      </section>
+    );
+  }
+
+  return <ExamForm exam={exam} questions={questions} />;
 }
