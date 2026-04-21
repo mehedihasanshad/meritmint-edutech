@@ -1,8 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { Lang } from '../Lang';
+import { AdmissionCountdown } from '../AdmissionCountdown';
+import { AlumniBubbles } from '../AlumniBubbles';
 
 const CHAOS_WORDS = [
   'ch. 7 revision…',
@@ -92,7 +94,10 @@ export function Hero() {
       <div className="section relative z-10 flex w-full flex-col items-start gap-8 md:gap-10">
         <span className="kicker-tag">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-ticker-pulse" />
-          <span lang="bn">এডমিশন ২০২৬</span> · ব্যাচ চলছে এখনই
+          <Lang
+            en="Admission '26 · Batches live now"
+            bn="এডমিশন ২০২৬ · ব্যাচ চলছে"
+          />
         </span>
 
         <div className="hero-banner-wrap">
@@ -138,58 +143,70 @@ export function Hero() {
           </div>
 
           <FloatingChip className="chip-tl" depth={18}>
-            <span className="chip-num">৪৭</span>
-            <span className="chip-label" lang="bn">
-              calibrated mock
+            <span className="chip-num">
+              <Lang en="47" bn="৪৭" />
+            </span>
+            <span className="chip-label">
+              <Lang en="calibrated mocks" bn="calibrated mock" />
             </span>
           </FloatingChip>
           <FloatingChip className="chip-tr" depth={-22}>
-            <span className="chip-num">২,৮৪৭</span>
-            <span className="chip-label" lang="bn">
-              placed · গত ৩ cycle
+            <span className="chip-num">
+              <Lang en="2,847" bn="২,৮৪৭" />
+            </span>
+            <span className="chip-label">
+              <Lang
+                en="placed · last 3 cycles"
+                bn="placed · গত ৩ cycle"
+              />
             </span>
           </FloatingChip>
           <FloatingChip className="chip-br" depth={14}>
             <span className="chip-dot" />
-            <span className="chip-label" lang="bn">
-              DMC · BUET · DU · IBA
-            </span>
+            <span className="chip-label">DU · JU · BUP · JnU · IBA</span>
           </FloatingChip>
         </div>
 
         <p className="max-w-[54ch] text-base leading-relaxed text-muted md:text-lg">
-          <span lang="bn">
-            MeritMint হচ্ছে সেই admission prep platform — যেটা বানিয়েছে সেই
-            ভাইয়া-আপুরা যারা নিজেরা HSC পেরিয়ে Medical, BUET, DU-তে পৌঁছেছে।
-            রাত নষ্ট করে এমন notes না, আসল exam-এর মতো calibrated mock, আর
-            doubt-এ phone ধরে এমন mentor।
-          </span>{' '}
-          <span lang="bn" className="italic-serif text-fg">
-            ভাই, আজই শুরু করো।
-          </span>
+          <Lang
+            en={
+              <>
+                MeritMint is admission prep for non-science university
+                seekers in Bangladesh — DU, JU, BUP, JnU, IBA. We also run
+                SSC-level academic, Spoken English, Competitive Math, and
+                book-completion series (Master by Jahangir Alam and
+                others). Built by people who actually got in, so the notes
+                make things click, the mocks hurt the way the real paper
+                does, and the mentors actually answer.{' '}
+                <span className="italic-serif text-fg">
+                  Start today.
+                </span>
+              </>
+            }
+            bn={
+              <>
+                MeritMint — Non-science background-এর student-দের জন্য
+                university admission prep। DU, JU, BUP, JnU, IBA-তে লড়াইয়ের
+                সঙ্গী। পাশাপাশি SSC পর্যন্ত science-ভিত্তিক academic course,
+                Spoken English, Competitive Math, আর admission-এর বই-গুলোকে
+                ধরে ধরে শেষ করানোর series (যেমন Jahangir Alam স্যারের
+                Master)। পুরোটা বানিয়েছে সেই ভাই-আপুরা যারা নিজেরাই এই পথে
+                হেঁটে এসেছে — তাই notes বোঝায়, mock আসলেই ঝাঁকায়, mentor
+                সত্যিই ফোন ধরে।{' '}
+                <span className="italic-serif text-fg">
+                  ভাই, শুরুটা আজকেই হোক।
+                </span>
+              </>
+            }
+          />
         </p>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <Link href="#courses" className="btn-pill btn-pill-primary">
-            <span lang="bn">কোর্স দেখো</span>
-            <ArrowIcon />
-          </Link>
-          <Link href="/login" className="btn-pill btn-pill-ghost">
-            <span lang="bn">৩ দিন ফ্রি ট্রায়াল</span>
-          </Link>
+        <div className="hero-urgency-row">
+          <AdmissionCountdown />
+          <AlumniBubbles />
         </div>
-
       </div>
     </section>
-  );
-}
-
-function ArrowIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 12h14" />
-      <path d="m12 5 7 7-7 7" />
-    </svg>
   );
 }
 

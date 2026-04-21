@@ -5,14 +5,15 @@ import { useEffect, useState } from 'react';
 import { NavLogo } from './NavLogo';
 import { LogoutButton } from './LogoutButton';
 import { ThemeToggle } from './ThemeToggle';
+import { LanguageToggle } from './LanguageToggle';
+import { Lang } from './Lang';
+import { Magnetic } from './Magnetic';
 
 const LINKS: { href: string; label: string; bn: string }[] = [
-  { href: '/#exams', label: 'Mocks', bn: 'Mock' },
-  { href: '/#how', label: 'How it works', bn: 'কীভাবে' },
   { href: '/#courses', label: 'Courses', bn: 'কোর্স' },
-  { href: '/#pricing', label: 'Pricing', bn: 'দাম' },
+  { href: '/#exams', label: 'Mocks', bn: 'Mock' },
+  { href: '/#payment', label: 'Payment', bn: 'পেমেন্ট' },
   { href: '/#faq', label: 'FAQ', bn: 'FAQ' },
-  { href: '/#connect', label: 'Contact', bn: 'যোগাযোগ' },
 ];
 
 type Props = {
@@ -46,7 +47,7 @@ export function MainNav({ username, isAdminUser }: Props) {
             className="nav-link"
             onClick={() => setOpen(false)}
           >
-            {l.label}
+            <Lang en={l.label} bn={l.bn} />
           </Link>
         ))}
       </nav>
@@ -70,13 +71,16 @@ export function MainNav({ username, isAdminUser }: Props) {
             </span>
           </>
         ) : (
-          <Link
-            href="/login"
-            className="btn-pill btn-pill-primary hidden px-4 py-2 text-sm sm:inline-flex"
-          >
-            Get started
-          </Link>
+          <Magnetic strength={0.3} className="hidden sm:inline-block">
+            <Link
+              href="/login"
+              className="btn-pill btn-pill-primary inline-flex h-9 items-center px-4 py-0 text-[0.82rem] leading-none"
+            >
+              <Lang en="Get started" bn="শুরু করো" />
+            </Link>
+          </Magnetic>
         )}
+        <LanguageToggle />
         <ThemeToggle />
         <button
           type="button"

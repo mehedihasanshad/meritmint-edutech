@@ -9,6 +9,9 @@ import {
 } from 'next/font/google';
 import { getSession, isAdmin } from '@/lib/auth';
 import { MainNav } from '@/components/MainNav';
+import { FloatingContact } from '@/components/FloatingContact';
+import { SmoothScroll } from '@/components/SmoothScroll';
+import { ScrollProgress } from '@/components/ScrollProgress';
 
 // Latin body — Geist: Vercel's flagship sans. Technical, restrained,
 // optically refined at every size. Reads as "2025 product" the way
@@ -65,12 +68,16 @@ export const metadata: Metadata = {
 const themeInitScript = `(() => {
   try {
     const stored = localStorage.getItem('theme');
-    // Default is dark. Light is opt-in via the toggle, regardless of
-    // the OS-level prefers-color-scheme setting.
     const theme = stored === 'light' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', theme);
   } catch (e) {
     document.documentElement.setAttribute('data-theme', 'dark');
+  }
+  try {
+    const lng = localStorage.getItem('lang');
+    document.documentElement.setAttribute('data-lang', lng === 'bn' ? 'bn' : 'en');
+  } catch (e) {
+    document.documentElement.setAttribute('data-lang', 'en');
   }
 })();`;
 
@@ -84,6 +91,7 @@ export default async function RootLayout({
     <html
       lang="en"
       data-theme="dark"
+      data-lang="en"
       className={`${sans.variable} ${display.variable} ${mono.variable} ${bengali.variable} ${bengaliDisplay.variable}`}
       suppressHydrationWarning
     >
@@ -91,6 +99,8 @@ export default async function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body>
+        <SmoothScroll />
+        <ScrollProgress />
         <div className="noise-overlay" aria-hidden />
         <header className="site-header">
           <MainNav
@@ -99,6 +109,7 @@ export default async function RootLayout({
           />
         </header>
         <main>{children}</main>
+        <FloatingContact />
       </body>
     </html>
   );

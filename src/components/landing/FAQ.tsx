@@ -1,23 +1,23 @@
 const QA = [
   {
-    q: 'ভাই, ২ মাস বাকি। আমি কি শেষ?',
-    a: 'একদম না। Crash Course এই জন্যই আছে। ৬ সপ্তাহের sprint lesson + highest-weightage chapter। গত cycle-এর অনেক topper এখান থেকেই শুরু করেছিল।',
+    q: 'ভাই, হাতে ২ মাস। শেষ তো?',
+    a: 'শেষ না। Crash Course এই জন্যই বানানো। ছয় সপ্তাহের ছোট-ছোট sprint lesson আর যেসব chapter-এ সবচেয়ে বেশি মার্ক আসে সেগুলোর drill। গত cycle-এর অনেক topper এখান থেকেই শুরু করেছিল।',
   },
   {
-    q: '10MS / Shikho থেকে এটা কতটা আলাদা?',
-    a: 'আমরা শুধু admission prep করি — school syllabus না। ছোট ব্যাচ, real topper mentor, ranked mock। Focus-এ ওরা আমাদের match করতে পারবে না।',
+    q: '10 Minute School বা Shikho-র সাথে পার্থক্য কী?',
+    a: 'ওরা সবকিছু পড়ায়। আমরা শুধু non-science university admission, SSC-পর্যন্ত academic, Spoken English, Competitive Math আর admission-এর বই-completion এই কয়েকটাতেই মন দিই। ছোট ব্যাচ, real topper mentor, ranked mock — focus-এর জায়গায় ওরা আমাদের ছুঁতে পারবে না।',
   },
   {
-    q: 'আমার এলাকায় net ভালো না, video বাফার করলে কী হবে?',
-    a: 'সব lesson download করা যায়। PDF offline চলে। Printed বই পৌঁছে দেই বাড়িতে। এক দাগ signal-এও প্রস্তুতি চালানো যাবে।',
+    q: 'আমার এলাকায় net দুর্বল। Video buffer করলে কী করবো?',
+    a: 'সব lesson download করা যায়, PDF offline-এ চলে। Printed বই-গুলো বাড়িতে পাঠিয়ে দিই। এক দাগ signal দিয়েও preparation চালানো যাবে।',
   },
   {
-    q: 'যদি admission না হয়?',
-    a: 'সৎভাবে বলি: কোনো platform guarantee দিতে পারে না। আমরা guarantee দিই — তুমি যেসব gap আছে সেগুলো জেনে exam hall-এ ঢুকবে। প্রথম ১৪ দিনে refund চাইলে full refund।',
+    q: 'যদি admission-এ না হয়, তাহলে?',
+    a: 'সৎভাবে বলি — কোনো platform admission guarantee দিতে পারে না। আমরা একটাই guarantee দিই: পরীক্ষার হলে ঢোকার আগে তুমি জানবে তোমার gap কোথায়। প্রথম ১৪ দিনে মন না বসলে পুরো টাকা ফেরত, কোনো প্রশ্ন ছাড়াই।',
   },
   {
-    q: 'Payment কীভাবে করবো?',
-    a: 'bKash, Nagad, Rocket — যেকোনোটা। Card-ও কাজ করে। দুই installment-এ ভাগ করেও দিতে পারো।',
+    q: 'আমি science background-এর — তোমাদের কাছে কী আছে?',
+    a: 'Admission prep-টা non-science-দের জন্য, এটা সত্যি। কিন্তু SSC-পর্যন্ত academic course-এ Physics, Chemistry, Biology, Higher Math, ICT সব আছে। Spoken English আর Competitive Math তো সবার জন্যই খোলা। HSC-এর পর science admission এখনও আমাদের scope-এ নেই — মিথ্যা বলব না।',
   },
 ];
 
@@ -30,7 +30,7 @@ export function FAQ() {
           <span lang="bn">যেসব প্রশ্ন</span>
           <br />
           <span lang="bn" className="italic-serif">
-            সবাই আসলেই জিজ্ঞেস করে।
+            আসলেই সবাই জিজ্ঞেস করে।
           </span>
         </h2>
       </div>
