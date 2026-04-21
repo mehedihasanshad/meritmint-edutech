@@ -92,12 +92,36 @@ export function Hero() {
       <div aria-hidden className="hero-dot-grid" />
 
       <div className="section relative z-10 flex w-full flex-col items-start gap-8 md:gap-10">
-        <span className="kicker-tag">
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-ticker-pulse" />
-          <Lang
-            en="Admission '26 · Batches live now"
-            bn="এডমিশন ২০২৬ · ব্যাচ চলছে"
-          />
+        <span className="live-pill" role="status" aria-live="polite">
+          <span className="live-pill-badge" aria-hidden>
+            <span className="live-pill-bars">
+              <span className="live-pill-bar" />
+              <span className="live-pill-bar" />
+              <span className="live-pill-bar" />
+            </span>
+            <span className="live-pill-word">LIVE</span>
+          </span>
+          <span className="live-pill-body">
+            <Lang
+              en="Admission '26 · Batches running now"
+              bn="এডমিশন ২০২৬ · ব্যাচ চলছে"
+            />
+            <svg
+              className="live-pill-arrow"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </span>
         </span>
 
         <div className="hero-banner-wrap">
@@ -167,39 +191,137 @@ export function Hero() {
           </FloatingChip>
         </div>
 
-        <p className="max-w-[54ch] text-base leading-relaxed text-muted md:text-lg">
-          <Lang
-            en={
-              <>
-                MeritMint is admission prep for non-science university
-                seekers in Bangladesh — DU, JU, BUP, JnU, IBA. We also run
-                SSC-level academic, Spoken English, Competitive Math, and
-                book-completion series (Master by Jahangir Alam and
-                others). Built by people who actually got in, so the notes
-                make things click, the mocks hurt the way the real paper
-                does, and the mentors actually answer.{' '}
-                <span className="italic-serif text-fg">
-                  Start today.
-                </span>
-              </>
-            }
-            bn={
-              <>
-                MeritMint — Non-science background-এর student-দের জন্য
-                university admission prep। DU, JU, BUP, JnU, IBA-তে লড়াইয়ের
-                সঙ্গী। পাশাপাশি SSC পর্যন্ত science-ভিত্তিক academic course,
-                Spoken English, Competitive Math, আর admission-এর বই-গুলোকে
-                ধরে ধরে শেষ করানোর series (যেমন Jahangir Alam স্যারের
-                Master)। পুরোটা বানিয়েছে সেই ভাই-আপুরা যারা নিজেরাই এই পথে
-                হেঁটে এসেছে — তাই notes বোঝায়, mock আসলেই ঝাঁকায়, mentor
-                সত্যিই ফোন ধরে।{' '}
-                <span className="italic-serif text-fg">
-                  ভাই, শুরুটা আজকেই হোক।
-                </span>
-              </>
-            }
-          />
-        </p>
+        <div className="hero-copy">
+          {/* Scale hook — two-figure split with a scarcity meter. The
+              contrast is the point: ghosted outline number on the left
+              (the crowd), solid red number on the right (the prize). */}
+          <div className="hero-hook">
+            <div className="hero-hook-cell">
+              <span className="hero-hook-num hero-hook-num-ghost">
+                <Lang en="4,00,000" bn="৪,০০,০০০" />
+              </span>
+              <span className="hero-hook-label">
+                <Lang en="apply every cycle" bn="প্রতি cycle-এ apply" />
+              </span>
+            </div>
+
+            <div className="hero-hook-arrow" aria-hidden>
+              <svg
+                viewBox="0 0 120 24"
+                width="100%"
+                height="24"
+                preserveAspectRatio="none"
+              >
+                <line
+                  x1="0"
+                  y1="12"
+                  x2="118"
+                  y2="12"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeDasharray="3 4"
+                  className="hero-hook-arrow-line"
+                />
+                <path
+                  d="M108 6 l10 6 -10 6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="hero-hook-arrow-head"
+                />
+              </svg>
+              <span className="hero-hook-arrow-tag" aria-hidden>
+                <Lang en="1 in 89" bn="৮৯-এ ১" />
+              </span>
+            </div>
+
+            <div className="hero-hook-cell hero-hook-cell-right">
+              <span className="hero-hook-num hero-hook-num-solid">
+                <Lang en="4,500" bn="৪,৫০০" />
+              </span>
+              <span className="hero-hook-label hero-hook-label-accent">
+                <Lang en="actually get in" bn="সত্যিই চান্স পায়" />
+              </span>
+            </div>
+          </div>
+
+          {/* Scarcity meter — the visual punchline */}
+          <div className="hero-hook-meter" aria-hidden>
+            <div className="hero-hook-meter-track">
+              <div className="hero-hook-meter-fill" />
+              <div className="hero-hook-meter-you" />
+            </div>
+            <span className="hero-hook-meter-caption">
+              <Lang
+                en={<>Only <b>1.1%</b> cross this line. Prepare like it.</>}
+                bn={
+                  <>
+                    মাত্র <b>১.১%</b> এই line পেরোয়। সেই preparation-ই
+                    দরকার।
+                  </>
+                }
+              />
+            </span>
+          </div>
+
+          {/* Positioning — what we actually do */}
+          <p className="hero-copy-body">
+            <Lang
+              en={
+                <>
+                  MeritMint doesn&rsquo;t do magic — we do{' '}
+                  <strong>preparation</strong>. For non-science admission.
+                </>
+              }
+              bn={
+                <>
+                  MeritMint magic করে না — আমরা{' '}
+                  <strong>preparation</strong> দিই, non-science admission
+                  সিকারদের জন্য।
+                </>
+              }
+            />
+          </p>
+
+          {/* Product universe as pills — scannable at a glance */}
+          <div className="hero-copy-pills">
+            <span className="hero-pill hero-pill-solid">DU</span>
+            <span className="hero-pill hero-pill-solid">JU</span>
+            <span className="hero-pill hero-pill-solid">BUP</span>
+            <span className="hero-pill hero-pill-solid">JnU</span>
+            <span className="hero-pill hero-pill-solid">IBA</span>
+            <span className="hero-pill-divider" aria-hidden>
+              +
+            </span>
+            <span className="hero-pill hero-pill-ghost">
+              <Lang en="SSC Academic" bn="SSC Academic" />
+            </span>
+            <span className="hero-pill hero-pill-ghost">
+              <Lang en="Spoken English" bn="Spoken English" />
+            </span>
+            <span className="hero-pill hero-pill-ghost">
+              <Lang en="Competitive Math" bn="Competitive Math" />
+            </span>
+            <span className="hero-pill hero-pill-ghost">
+              <Lang
+                en={<>Book series · Master <em>by Jahangir Alam</em></>}
+                bn={<>Book series · Master <em>(Jahangir Alam)</em></>}
+              />
+            </span>
+          </div>
+
+          {/* Signature trust-line — italic serif, left-accented */}
+          <p className="hero-copy-closer">
+            <span className="italic-serif">
+              <Lang
+                en="Built by people who actually got in."
+                bn="বানিয়েছে সেই ভাই-আপুরা — যারা নিজেরাই পেরিয়েছে।"
+              />
+            </span>
+          </p>
+        </div>
 
         <div className="hero-urgency-row">
           <AdmissionCountdown />
