@@ -54,20 +54,22 @@ export function SiteFooter() {
               হাতে যারা নিজেরা admission পেরিয়েছে।
             </p>
 
-            {/* Compact horizontal contact tile — left column stacks
-                address/phone/email rows; right column stacks socials,
-                app-store pills, and copyright. */}
-            <div className="footer-contact">
-              <dl className="footer-contact-left">
-                <div className="footer-contact-row">
+            {/* Contact tile + actions tile — two side-by-side panels.
+                Contact: address / phone / email only (breathable spacing).
+                Actions: socials + app-store pills on the right. */}
+            <div className="footer-contact-row-wrap">
+              <dl className="footer-contact">
+                <div className="footer-contact-line">
                   <dt aria-label="Address">
                     <PinIcon />
                   </dt>
                   <dd>
-                    Mirpur 12, Block D, Pallabi · Dhaka, Bangladesh
+                    Mirpur 12, Block D, Pallabi
+                    <br />
+                    Dhaka, Bangladesh
                   </dd>
                 </div>
-                <div className="footer-contact-row">
+                <div className="footer-contact-line">
                   <dt aria-label="Phone">
                     <PhoneIcon />
                   </dt>
@@ -77,7 +79,7 @@ export function SiteFooter() {
                     </a>
                   </dd>
                 </div>
-                <div className="footer-contact-row">
+                <div className="footer-contact-line">
                   <dt aria-label="Email">
                     <MailIcon />
                   </dt>
@@ -92,8 +94,8 @@ export function SiteFooter() {
                 </div>
               </dl>
 
-              <div className="footer-contact-right">
-                <div className="footer-contact-socials">
+              <div className="footer-actions">
+                <div className="footer-actions-socials">
                   <Social
                     label="Facebook"
                     href="https://facebook.com/ConnectXmeritmint"
@@ -117,7 +119,7 @@ export function SiteFooter() {
                   </Social>
                 </div>
 
-                <div className="footer-app-pills">
+                <div className="footer-actions-apps">
                   <Link
                     href="#"
                     className="footer-app-pill"
@@ -144,19 +146,17 @@ export function SiteFooter() {
                   </Link>
                 </div>
               </div>
-
-              <div className="footer-copyright-inline">
-                © {new Date().getFullYear()} · All rights reserved by{' '}
-                <span className="text-fg font-semibold">
-                  Mehedi Hasan Shad
-                </span>
-              </div>
             </div>
           </div>
 
           <FooterCol title="Learn" items={LINKS_LEARN} />
           <FooterCol title="Company" items={LINKS_COMPANY} />
           <FooterCol title="Legal" items={LINKS_LEGAL} />
+        </div>
+
+        <div className="footer-copyright-center">
+          © {new Date().getFullYear()} · All rights reserved by{' '}
+          <span className="text-fg font-semibold">Mehedi Hasan Shad</span>
         </div>
       </div>
     </footer>

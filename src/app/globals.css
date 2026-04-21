@@ -64,12 +64,16 @@ html {
     animation-timeline: view();
     animation-range: entry 0% cover 30%;
   }
-  /* Headers/heroes already have their own entry animations — don't
-     double up. */
+  /* Headers/heroes already have their own entry animations + the
+     footer's copyright center line should stay crisp regardless of
+     scroll position (otherwise it reads blurred because it's always
+     near the bottom of the viewport entry zone). Excluded here. */
   .hero-stage .section > *,
   .site-header,
   .hero-banner-wrap,
-  .hero-dot-grid {
+  .hero-dot-grid,
+  .site-footer .footer-copyright-center,
+  .site-footer .section > * {
     animation: none;
   }
 }
@@ -1864,6 +1868,23 @@ html[data-theme='light'] .stat-number-glow {
   font-size: 0.92em;
 }
 
+/* Mentor chip — the one coordinator chip on the wall gets a gradient
+   ring + amber-tinted rank line so it reads as "staff, not student". */
+.topper-card-mentor {
+  border-color: rgba(255, 215, 168, 0.4);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 59, 48, 0.12),
+    var(--glass-bg)
+  );
+}
+.topper-card-mentor .topper-rank {
+  color: #ffd7a8;
+}
+.topper-card-mentor .topper-avatar {
+  box-shadow: 0 0 0 2px rgba(255, 215, 168, 0.55);
+}
+
 /* Topper chip */
 .topper-card {
   display: flex;
@@ -2671,76 +2692,82 @@ html[data-theme='light'] .site-footer {
 }
 .footer-link:hover { color: var(--fg); }
 
-/* Horizontal contact tile — low height, full column width. Two-column
-   interior: address/phone/email rows on the left, socials + app-store
-   pills on the right. Copyright line runs full-width at the bottom.
-   Keeps all contact/download/legal info in one compact panel. */
-.footer-contact {
+/* Contact + actions row — two tiles side by side inside the brand
+   column. Contact tile holds only address/phone/email with room to
+   breathe. Actions tile holds socials + app pills. They stack on
+   narrow screens. */
+.footer-contact-row-wrap {
   margin-top: 1.25rem;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  column-gap: 1.25rem;
-  row-gap: 0.6rem;
-  padding: 0.9rem 1.1rem;
+  gap: 0.9rem;
+  align-items: stretch;
+}
+@media (max-width: 640px) {
+  .footer-contact-row-wrap {
+    grid-template-columns: 1fr;
+  }
+}
+
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.1rem 1.2rem;
   border-radius: 0.9rem;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
+  margin: 0;
   width: 100%;
   max-width: none;
+}
+.footer-contact-line {
+  display: grid;
+  grid-template-columns: 1.25rem 1fr;
+  gap: 0.7rem;
   align-items: start;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: rgba(var(--fg-rgb), 0.85);
 }
-@media (max-width: 640px) {
-  .footer-contact {
-    grid-template-columns: 1fr;
-    row-gap: 0.75rem;
-  }
-}
-.footer-contact-left {
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-  margin: 0;
-  min-width: 0;
-}
-.footer-contact-row {
-  display: grid;
-  grid-template-columns: 1.1rem 1fr;
-  gap: 0.55rem;
-  align-items: center;
-  font-size: 0.82rem;
-  line-height: 1.35;
-  color: rgba(var(--fg-rgb), 0.82);
-}
-.footer-contact-row dt {
+.footer-contact-line dt {
   color: #ff7f78;
+  padding-top: 0.25rem;
   display: grid;
-  place-items: center;
-  padding-top: 0;
+  place-items: start center;
 }
-.footer-contact-row dd { margin: 0; }
-.footer-contact-right {
+.footer-contact-line dd { margin: 0; }
+
+/* Actions tile — socials + app pills on the right of the contact tile */
+.footer-actions {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
-  align-items: flex-end;
+  gap: 0.75rem;
+  padding: 1.1rem 1.2rem;
+  border-radius: 0.9rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  min-width: 12rem;
 }
 @media (max-width: 640px) {
-  .footer-contact-right { align-items: flex-start; }
+  .footer-actions { min-width: 0; }
 }
-.footer-contact-socials {
+.footer-actions-socials {
   display: flex;
   flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.footer-actions-apps {
+  display: flex;
+  flex-direction: column;
   gap: 0.4rem;
 }
-/* App-store pills — compact version (16px icon + two lines of text)
-   so the "Get it on Google Play / App Store" marks fit inside the
-   contact card without needing their own row. */
-.footer-app-pills {
-  display: flex;
-  gap: 0.45rem;
-  flex-wrap: wrap;
+@media (max-width: 640px) {
+  .footer-actions-apps { flex-direction: row; flex-wrap: wrap; }
 }
 .footer-app-pill {
   display: inline-flex;
@@ -2779,16 +2806,30 @@ html[data-theme='light'] .site-footer {
   color: var(--fg);
 }
 
-/* Copyright line spans both columns at the bottom of the tile, readable
-   size, no letter-spacing fuzz. */
-.footer-copyright-inline {
-  grid-column: 1 / -1;
+/* Centered copyright line at the very bottom of the footer — below
+   the main grid, separated by a thin divider. Sized and weighted for
+   crisp rendering at any zoom (no micro-text, no letter-spacing fuzz,
+   high contrast). Explicitly excluded from scroll-linked reveal
+   animations (see earlier in this file) so it never sits mid-blur. */
+.footer-copyright-center {
+  margin-top: 2rem;
+  padding-top: 1.1rem;
   border-top: 1px solid var(--glass-border);
-  padding-top: 0.5rem;
-  font-size: 0.78rem;
-  line-height: 1.35;
-  color: rgba(var(--fg-rgb), 0.78);
+  text-align: center;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  font-weight: 500;
+  color: rgba(var(--fg-rgb), 0.92);
   letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* Belt-and-braces: kill any filter or opacity a parent's scroll
+     animation might be applying, and lock to its own layer. */
+  animation: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none;
 }
 
 /* ===== Back-to-top button — sits centered above the footer content ===== */
