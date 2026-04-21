@@ -4,6 +4,7 @@ import { CourseDeck } from '@/components/landing/CourseDeck';
 import { PaymentSection } from '@/components/landing/PaymentSection';
 import { ExamBatches } from '@/components/landing/ExamBatches';
 import { FAQ } from '@/components/landing/FAQ';
+import { TopperWall } from '@/components/landing/TopperWall';
 import { SiteFooter } from '@/components/landing/SiteFooter';
 
 export default function HomePage() {
@@ -15,6 +16,7 @@ export default function HomePage() {
       <PaymentSection />
       <ExamBatches />
       <FAQ />
+      <TopperWall />
       <SiteFooter />
     </>
   );
